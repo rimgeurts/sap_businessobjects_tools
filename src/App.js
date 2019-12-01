@@ -127,10 +127,10 @@ class App extends React.Component {
 
         <div className={styles.box3}>
           <LoginForm
-            handleSubmit={(event) => { this.handleSubmit() }}
-            onclick={(event) => { this.onclick() }}
-            server={this.state.server}
-            handleChange={(event) => {this.handleChange()}}
+            handleSubmit = {(event) => { this.handleSubmit(event) }}
+            onclick = {(event) => { this.onclick(event) }}
+            server = { this.state.server }
+            handleChange = {(event) => { this.handleChange(event) }}
           />
         </div>
 

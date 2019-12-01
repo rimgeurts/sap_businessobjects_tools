@@ -33,7 +33,7 @@ const LoginForm = (props) => {
                 onChange={props.handleChange}
             />
             
-            <CustomInput 
+            <input
                 className={styles.loginbutton} 
                 type="submit" 
                 value="Login" 
