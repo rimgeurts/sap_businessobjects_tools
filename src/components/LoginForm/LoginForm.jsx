@@ -7,7 +7,6 @@ const LoginForm = (props) => {
     return (
         <form className={styles.loginform} onSubmit={props.handleSubmit} >
             <CustomInput
-                className={styles.login}
                 onClick={props.handleClick}
                 type="text"
                 name="username"
@@ -16,7 +15,6 @@ const LoginForm = (props) => {
             />
 
             <CustomInput
-                className={styles.login}
                 onClick={props.handleClick}
                 type="password"
                 name="password"
@@ -25,7 +23,6 @@ const LoginForm = (props) => {
             />
 
             <CustomInput
-                className={styles.login}
                 onClick={props.handleClick}
                 type="text"
                 name="server"
