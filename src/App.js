@@ -2,6 +2,7 @@ import React from "react";
 import LoginForm from "./components/LoginForm/LoginForm";
 import SearchForm from "./components/SearchForm/SearchForm";
 import styles from "./App.module.scss";
+import Modal from './components/UI/Modal';
 import { login, getData } from "./api/BusinessObjectsAPI";
 
 class App extends React.Component {
@@ -49,7 +50,9 @@ class App extends React.Component {
 
   render() {
     return (
+      
       <div className={styles.App}>
+      <Modal></Modal>
         <div className={styles.box1}>
           <h1>Business Objects Scheduling Tool</h1>
         </div>
