@@ -58,8 +58,8 @@ const NavBar = props => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Remi's BO Tools
+          <Typography variant="subtitle1" className={classes.title}>
+            Batch Scheduler
           </Typography>
           <LoginModal />
         </Toolbar>

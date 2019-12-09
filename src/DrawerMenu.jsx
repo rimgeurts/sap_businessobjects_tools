@@ -9,14 +9,16 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import CreateIcon from "@material-ui/icons/Create";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import BackupIcon from "@material-ui/icons/Backup";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 const drawerWidth = 240;
 
@@ -102,26 +104,43 @@ export default function DrawerMenu(props) {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
+          <List
+            subheader={<ListSubheader>Scheduling</ListSubheader>}
+            className={classes.root}
+          >
+            <ListItem button>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <ScheduleIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={"Status"} />
             </ListItem>
-          ))}
+          </List>
+          <Divider />
+          <List
+            subheader={<ListSubheader>Groups</ListSubheader>}
+            className={classes.root}
+          >
+            <ListItem button>
+              <ListItemIcon>
+                <CreateIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Manage"} />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <BackupIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Import"} />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <AddBoxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Create"} />
+            </ListItem>
+          </List>
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
     </div>
   );
