@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import Test from "./LoginModal";
-import NavBar from "./NavBar";
 import AppNew from './AppNew'
 import * as serviceWorker from "./serviceWorker";
 

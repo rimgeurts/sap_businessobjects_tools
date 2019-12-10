@@ -1,35 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import { lighten, makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import TextField from '@material-ui/core/TextField';
-import SearchField from './SearchField'
-
-const globalColors = {
-  background: "white",
-  columnsheader: "white",
-  textcolor: "black !important",
-  linecoloreven: "white",
-  linecolorodd: "#fafafa",
-  hover: "#e8eaf6 !important"
-};
+import ScheduleTableToolBar from "./ScheduleTableToolBar";
+import ScheduleTableHeader from "./ScheduleTableHeader";
+import { useStyles, StyledTableRow } from "./ScheduleTable.style";
 
 function createData(name, status, fat, carbs, protein) {
   return { name, status, fat, carbs, protein };
@@ -66,206 +47,6 @@ function getSorting(order, orderBy) {
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
 }
-
-const headCells = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Instance Name"
-  },
-  { id: "status", numeric: true, disablePadding: false, label: "Status" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Created Date" },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Refresh Time (s)"
-  },
-  { id: "protein", numeric: true, disablePadding: false, label: "Recurring" }
-];
-
-function EnhancedTableHead(props) {
-  const {
-    classes,
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort
-  } = props;
-  const createSortHandler = property => event => {
-    onRequestSort(event, property);
-  };
-
-  const useTableHeadStyles = makeStyles(theme => ({
-    colorScheme: {
-      backgroundColor: globalColors.columnsheader,
-      color: globalColors.textcolor
-    },
-    row: {
-      fontSize: ".90em"
-    }
-  }));
-
-  const classesTableHead = useTableHeadStyles();
-  return (
-    <TableHead className={classesTableHead.colorScheme}>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            className={classesTableHead.colorScheme}
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
-        </TableCell>
-        {headCells.map(headCell => (
-          <TableCell
-            className={classesTableHead.row}
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={order}
-              onClick={createSortHandler(headCell.id)}
-            >
-              <div className={classesTableHead.colorScheme}>
-                {headCell.label}
-              </div>
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
-};
-
-const useToolbarStyles = makeStyles(theme => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1)
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.primary.main,
-          backgroundColor: lighten(theme.palette.primary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
-  title: {
-    flex: "1 1 100%",
-    fontsize: ".75em"
-  }
-}));
-
-const EnhancedTableToolbar = props => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} id="tableTitle">
-          Instances
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired
-};
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%"
-  },
-  paper: {
-    width: "100%",
-    backgroundColor: "##e8eaf6",
-    color: globalColors.textcolor,
-    marginBottom: theme.spacing(2)
-  },
-  table: {
-    minWidth: 750
-  },
-  tableWrapper: {
-    overflowX: "auto"
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1
-  },
-  row: {
-    fontSize: "0.9em",
-    "&:hover": {
-      backgroundColor: globalColors.hover
-    }
-  },
-  paginitation: {
-    fontsize: "0.1em",
-    color: globalColors.textcolor
-    //backgroundColor: globalColors.background
-  }
-}));
 
 export default function EnhancedTable() {
   const classes = useStyles();
@@ -330,22 +111,10 @@ export default function EnhancedTable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      "&:nth-of-type(odd)": {
-        backgroundColor: globalColors.linecolorodd
-      },
-      "&:nth-of-type(even)": {
-        backgroundColor: globalColors.linecoloreven
-      }
-    }
-  }))(TableRow);
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-            <SearchField/>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <ScheduleTableToolBar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table
             className={classes.table}
@@ -353,7 +122,7 @@ export default function EnhancedTable() {
             size={dense ? "small" : "medium"}
             aria-label="enhanced table"
           >
-            <EnhancedTableHead
+            <ScheduleTableHeader
               classes={classes}
               numSelected={selected.length}
               order={order}
@@ -430,17 +199,18 @@ export default function EnhancedTable() {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+
+        <FormControlLabel
+          control={
+            <Switch
+              color="primary"
+              checked={dense}
+              onChange={handleChangeDense}
+            />
+          }
+          label="Compact View"
+        />
       </Paper>
-      <FormControlLabel
-        control={
-          <Switch
-            color="primary"
-            checked={dense}
-            onChange={handleChangeDense}
-          />
-        }
-        label="Compact View"
-      />
     </div>
   );
 }
