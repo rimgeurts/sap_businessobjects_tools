@@ -1,16 +1,16 @@
-import React from "react";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import ScheduleTableToolBar from "./ScheduleTableToolBar";
+import React from "react";
+import { StyledTableRow, useStyles } from "./ScheduleTable.style";
 import ScheduleTableHeader from "./ScheduleTableHeader";
-import { useStyles, StyledTableRow } from "./ScheduleTable.style";
+import ScheduleTableToolBar from "./ScheduleTableToolBar";
 
 function createData(name, status, fat, carbs, protein) {
   return { name, status, fat, carbs, protein };

@@ -1,37 +1,41 @@
-import React from "react";
-import NavBar from "../components_new/NavBar";
-import DrawerMenu from "../components_new/DrawerMenu";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import ScheduleTable from "../components_new/ScheduleTable";
+import { makeStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
+import React from "react";
+import DrawerMenu from "../components_new/DrawerMenu";
+import NavBar from "../components_new/NavBar";
 import ReportTable from "../components_new/ReportTable";
+import ScheduleTable from "../components_new/ScheduleTable";
 import SearchField from "../components_new/SearchField";
+import { login, getData } from "../api/BusinessObjectsAPI";
 
 const Layout = props => {
   const [state, setState] = React.useState({
     menu: {
       drawerMenuOpen: true
     },
-    test: true
+    reportId: undefined,
+    logonToken: undefined
   });
 
   const handleDrawerOpen = () => {
-    setState({
-      ...state,
-      menu: {
-        drawerMenuOpen: true
-      }
-    });
+    setState({ ...state, menu: { drawerMenuOpen: true } });
   };
 
   const handleDrawerClose = () => {
-    setState({
-      ...state,
-      menu: {
-        drawerMenuOpen: false
-      }
-    });
+    setState({ ...state, menu: { drawerMenuOpen: false } });
+  };
+
+  const handleSearchSubmit = event => {
+    if (event.keyCode === 13 || event.keyCode === 9) {
+      login().then(response => {
+        setState({ ...state, logonToken: response.logonToken });
+      });
+    }
+  };
+
+  const handleSearchChange = event => {
+    setState({ ...state, reportId: event.target.value });
   };
 
   const drawerWidth = 240;
@@ -53,6 +57,9 @@ const Layout = props => {
         duration: theme.transitions.duration.enteringScreen
       }),
       marginLeft: drawerWidth
+    },
+    paper: {
+      marginBottom: 5
     }
   }));
 
@@ -68,7 +75,10 @@ const Layout = props => {
         })}
       >
         <Paper className={classes.paper}>
-          <SearchField />
+          <SearchField
+            handleSearchSubmit={event => handleSearchSubmit(event)}
+            handleSearchChange={event => handleSearchChange(event)}
+          />
         </Paper>
         <Paper className={classes.paper}>
           <ReportTable />

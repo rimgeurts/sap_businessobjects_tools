@@ -1,17 +1,17 @@
-import React from "react";
+import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Grid from "@material-ui/core/Grid";
+import React from "react";
 import useStyles from './SearchForm.styles';
 
 
-const SearchField = () => {
+const SearchField = ({handleSearchSubmit, handleSearchChange}) => {
   const classes = useStyles();
   return (
     <div>
       <TextField
-        InputProps={{ className: classes.input }}
+        onKeyDown={handleSearchSubmit}
+        onChange={handleSearchChange}
         InputLabelProps={{
           classes: {
             root: classes.labelRoot,

@@ -1,4 +1,4 @@
-import { lighten, makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 
 const globalColors = {
