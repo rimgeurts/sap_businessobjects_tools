@@ -1,5 +1,4 @@
 export const login = async (name, password, server) => {
-  console.log("attempting login", name, password, server);
   const response = await fetch(`http://${server}/biprws/logon/long/`, {
     method: "POST",
     headers: {
@@ -12,7 +11,7 @@ export const login = async (name, password, server) => {
       auth: "secEnterprise",
       userName: name
     })
-  });
+  })
   return response.json();
 };
 

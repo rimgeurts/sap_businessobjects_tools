@@ -18,7 +18,8 @@ const Layout = props => {
     logonToken: "",
     name: undefined,
     password: undefined,
-    server: 'localhost:6405'
+    server: 'localhost:6405',
+    error: ''
   });
 
   const handleDrawerOpen = () => {

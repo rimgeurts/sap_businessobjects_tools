@@ -6,17 +6,19 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import UserIcon from "@material-ui/icons/AccountBox";
 import React from "react";
-import { useStyles } from "./LoginModal.style";
+import { login } from "../api/BusinessObjectsAPI";
 import Context from "../layouts/context";
-import { login } from '../api/BusinessObjectsAPI'
+import { useStyles } from "./LoginModal.style";
 
 export default function LoginModal() {
   const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("login");
   const { state, setState } = React.useContext(Context);
+  const [userError, setUserError] = React.useState(false);
+  const [serverError, setServerError] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
-    console.log("hello", state);
   };
 
   const handleClose = () => {
@@ -25,6 +27,35 @@ export default function LoginModal() {
 
   const handleSubmit = event => {
     login(state.name, state.password, state.server)
+      .then(response => {
+        if (response.error_code) {
+          setState({
+            ...state,
+            error: response.message,
+            password: ""
+          });
+          setUserError(true);
+        } else {
+          setState({
+            ...state,
+            logonToken: '"' + response.logonToken + '"',
+            error: "",
+            password: ""
+          });
+          setOpen(false);
+          setMessage(state.name);
+          setServerError(false);
+          setUserError(false);
+        }
+      })
+      .catch(response => {
+        setState({
+          ...state,
+          error: "Cannot connect to the server.",
+          error: response.message
+        });
+        setServerError(true);
+      });
   };
 
   const handleChange = event => {
@@ -32,7 +63,12 @@ export default function LoginModal() {
     setState({
       ...state,
       [event.target.id]: event.target.value
-    })
+    });
+    if (event.target.id == "server") {
+      setServerError(false);
+    } else {
+      setUserError(false);
+    }
   };
 
   const classes = useStyles();
@@ -41,8 +77,8 @@ export default function LoginModal() {
     <div>
       <Button color="inherit" onClick={handleClickOpen}>
         <div variant="subtitle1" className={classes.buttontext}>
-          Login
-        </div>{" "}
+          {message}
+        </div>
         <UserIcon />
       </Button>
       <Dialog
@@ -55,29 +91,37 @@ export default function LoginModal() {
           style={{ backgroundColor: "#3f51b5", color: "white" }}
           id="form-dialog-title"
         >
-          Authenticate
+          SAP Login
         </DialogTitle>
         <DialogContent>
           <TextField
+            error={userError}
             autoFocus
+            variant="outlined"
             onChange={handleChange}
             margin="dense"
             id="name"
-            label="Username"
+            label="Enter Username"
             type="text"
+            value={state.name}
             fullWidth
           />
           <TextField
-            autoFocus
+            error={userError}
+            helperText={userError ? "Incorrect username or password" : ""}
+            variant="outlined"
             onChange={handleChange}
             margin="dense"
             id="password"
-            label="Password"
+            label="Enter Password"
             type="password"
+            value={state.password}
             fullWidth
           />
           <TextField
-            autoFocus
+            error={serverError}
+            helperText={serverError ? "Cannot connect to server." : ""}
+            variant="outlined"
             onChange={handleChange}
             margin="dense"
             id="server"
