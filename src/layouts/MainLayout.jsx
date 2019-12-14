@@ -5,9 +5,9 @@ import React from "react";
 import DrawerMenu from "../components_new/DrawerMenu";
 import NavBar from "../components_new/NavBar";
 import ReportTable from "../components_new/ReportTable";
-import ScheduleTable from "../components_new/ScheduleTable";
 import SearchField from "../components_new/SearchField";
 import { login, getData } from "../api/BusinessObjectsAPI";
+import Context from "./context";
 
 const Layout = props => {
   const [state, setState] = React.useState({
@@ -15,7 +15,10 @@ const Layout = props => {
       drawerMenuOpen: true
     },
     reportId: undefined,
-    logonToken: undefined
+    logonToken: "",
+    name: undefined,
+    password: undefined,
+    server: 'localhost:6405'
   });
 
   const handleDrawerOpen = () => {
@@ -33,6 +36,10 @@ const Layout = props => {
       });
     }
   };
+
+  React.useEffect(() => {
+    console.log(state.logonToken);
+  }, [state.logonToken]);
 
   const handleSearchChange = event => {
     setState({ ...state, reportId: event.target.value });
@@ -66,7 +73,7 @@ const Layout = props => {
   const classes = useStyles();
 
   return (
-    <div>
+    <Context.Provider value={{ state, setState }}>
       <DrawerMenu handleDrawerClose={handleDrawerClose} state={state} />
       <NavBar handleDrawerOpen={handleDrawerOpen} state={state}></NavBar>
       <main
@@ -83,10 +90,9 @@ const Layout = props => {
         <Paper className={classes.paper}>
           <ReportTable />
         </Paper>
-
-        <ScheduleTable />
+        {props.children}
       </main>
-    </div>
+    </Context.Provider>
   );
 };
 

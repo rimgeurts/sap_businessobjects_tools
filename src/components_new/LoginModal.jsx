@@ -6,18 +6,33 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import UserIcon from "@material-ui/icons/AccountBox";
 import React from "react";
-import { useStyles } from './LoginModal.style';
-
+import { useStyles } from "./LoginModal.style";
+import Context from "../layouts/context";
+import { login } from '../api/BusinessObjectsAPI'
 
 export default function LoginModal() {
   const [open, setOpen] = React.useState(false);
+  const { state, setState } = React.useContext(Context);
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log("hello", state);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = event => {
+    login(state.name, state.password, state.server)
+  };
+
+  const handleChange = event => {
+    console.log([event.target.id]);
+    setState({
+      ...state,
+      [event.target.id]: event.target.value
+    })
   };
 
   const classes = useStyles();
@@ -25,7 +40,10 @@ export default function LoginModal() {
   return (
     <div>
       <Button color="inherit" onClick={handleClickOpen}>
-        <div variant="subtitle1" className={classes.buttontext}>Login</div> <UserIcon />
+        <div variant="subtitle1" className={classes.buttontext}>
+          Login
+        </div>{" "}
+        <UserIcon />
       </Button>
       <Dialog
         maxWidth="xs"
@@ -42,6 +60,7 @@ export default function LoginModal() {
         <DialogContent>
           <TextField
             autoFocus
+            onChange={handleChange}
             margin="dense"
             id="name"
             label="Username"
@@ -50,18 +69,21 @@ export default function LoginModal() {
           />
           <TextField
             autoFocus
+            onChange={handleChange}
             margin="dense"
-            id="name"
+            id="password"
             label="Password"
             type="password"
             fullWidth
           />
           <TextField
             autoFocus
+            onChange={handleChange}
             margin="dense"
-            id="name"
+            id="server"
             label="Server"
             type="text"
+            value={state.server}
             fullWidth
           />
         </DialogContent>
@@ -69,7 +91,7 @@ export default function LoginModal() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Login
           </Button>
         </DialogActions>

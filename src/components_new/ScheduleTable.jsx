@@ -1,7 +1,5 @@
 import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Paper from "@material-ui/core/Paper";
-import Switch from "@material-ui/core/Switch";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -54,7 +52,7 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
@@ -73,7 +71,6 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event, name) => {
-    console.log("name", name);
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -100,10 +97,6 @@ export default function EnhancedTable() {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleChangeDense = event => {
-    setDense(event.target.checked);
   };
 
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -135,7 +128,6 @@ export default function EnhancedTable() {
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  console.log("row", row);
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -198,17 +190,6 @@ export default function EnhancedTable() {
           page={page}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-
-        <FormControlLabel
-          control={
-            <Switch
-              color="primary"
-              checked={dense}
-              onChange={handleChangeDense}
-            />
-          }
-          label="Compact View"
         />
       </Paper>
     </div>

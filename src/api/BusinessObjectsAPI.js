@@ -1,15 +1,16 @@
-export const login = async () => {
-  const response = await fetch("http://localhost:6405/biprws/logon/long/", {
+export const login = async (name, password, server) => {
+  console.log("attempting login", name, password, server);
+  const response = await fetch(`http://${server}/biprws/logon/long/`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      password: "Burung79!",
+      password: password,
       clientType: "",
       auth: "secEnterprise",
-      userName: "administrator"
+      userName: name
     })
   });
   return response.json();
