@@ -5,5 +5,19 @@ export const useStyles = makeStyles(theme => ({
       paddingRight: "10px",
       fontSize: ".8em",
     },
+    input: {
+      fontSize: "1em"
+    },
+    labelRoot: {
+      margin: theme.spacing(0),
+      fontSize: "1.1em",
+      "&$labelFocused": {
+        color: "inherit"
+      }
+    },
+    labelFocused: {
+      color: "inherit"
+    }
   }));
+  
 

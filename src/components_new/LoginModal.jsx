@@ -3,6 +3,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import UserIcon from "@material-ui/icons/AccountBox";
 import React from "react";
@@ -82,19 +83,22 @@ export default function LoginModal() {
         <UserIcon />
       </Button>
       <Dialog
+        fullWidth
         maxWidth="xs"
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle
-          style={{ backgroundColor: "#3f51b5", color: "white" }}
+          style={{ backgroundColor: "#3f51b5", color: "white", fontSize:"10px" }}
           id="form-dialog-title"
         >
-          SAP Login
+          Login
         </DialogTitle>
         <DialogContent>
+        <Box m={1.5} />
           <TextField
+            className={classes.textfield}
             error={userError}
             autoFocus
             variant="outlined"
@@ -105,7 +109,17 @@ export default function LoginModal() {
             type="text"
             value={state.name}
             fullWidth
+            InputLabelProps={{
+              classes: {
+                root: classes.labelRoot,
+                focused: classes.labelFocused
+              }
+            }}
+            InputProps={{
+              className: classes.input,
+            }}
           />
+          <Box m={1.5} />
           <TextField
             error={userError}
             helperText={userError ? "Incorrect username or password" : ""}
@@ -117,7 +131,17 @@ export default function LoginModal() {
             type="password"
             value={state.password}
             fullWidth
+            InputLabelProps={{
+              classes: {
+                root: classes.labelRoot,
+                focused: classes.labelFocused
+              }
+            }}
+            InputProps={{
+              className: classes.input,
+            }}
           />
+          <Box m={1.5} />
           <TextField
             error={serverError}
             helperText={serverError ? "Cannot connect to server." : ""}
@@ -129,6 +153,15 @@ export default function LoginModal() {
             type="text"
             value={state.server}
             fullWidth
+            InputLabelProps={{
+              classes: {
+                root: classes.labelRoot,
+                focused: classes.labelFocused
+              }
+            }}
+            InputProps={{
+              className: classes.input,
+            }}
           />
         </DialogContent>
         <DialogActions>
