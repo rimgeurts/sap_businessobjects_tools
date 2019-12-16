@@ -16,7 +16,7 @@ export const useStyles = makeStyles(theme => ({
   },
   paper: {
     width: "100%",
-    backgroundColor: "##e8eaf6",
+    //backgroundColor: "#e8eaf6",
     marginBottom: theme.spacing(2)
   },
   table: {

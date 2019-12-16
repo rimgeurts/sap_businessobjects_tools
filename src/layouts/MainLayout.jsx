@@ -7,7 +7,8 @@ import NavBar from "../components_new/NavBar";
 import ReportTable from "../components_new/ReportTable";
 import SearchField from "../components_new/SearchField";
 import { login, getData } from "../api/BusinessObjectsAPI";
-import Context from "./context";
+import Context from "../util/Context";
+import { SnackbarProvider } from "notistack";
 
 const Layout = props => {
   const [state, setState] = React.useState({
@@ -15,11 +16,12 @@ const Layout = props => {
       drawerMenuOpen: true
     },
     reportId: undefined,
-    logonToken: "",
+    logonToken: null,
     name: undefined,
     password: undefined,
-    server: 'localhost:6405',
-    error: ''
+    auth: "secEnterprise",
+    server: "localhost:6405",
+    error: ""
   });
 
   const handleDrawerOpen = () => {
@@ -74,26 +76,28 @@ const Layout = props => {
   const classes = useStyles();
 
   return (
-    <Context.Provider value={{ state, setState }}>
-      <DrawerMenu handleDrawerClose={handleDrawerClose} state={state} />
-      <NavBar handleDrawerOpen={handleDrawerOpen} state={state}></NavBar>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open
-        })}
-      >
-        <Paper className={classes.paper}>
-          <SearchField
-            handleSearchSubmit={event => handleSearchSubmit(event)}
-            handleSearchChange={event => handleSearchChange(event)}
-          />
-        </Paper>
-        <Paper className={classes.paper}>
-          <ReportTable />
-        </Paper>
-        {props.children}
-      </main>
-    </Context.Provider>
+    <SnackbarProvider>
+      <Context.Provider value={{ state, setState }}>
+        <DrawerMenu handleDrawerClose={handleDrawerClose} state={state} />
+        <NavBar handleDrawerOpen={handleDrawerOpen} state={state}></NavBar>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <Paper className={classes.paper}>
+            <SearchField
+              handleSearchSubmit={event => handleSearchSubmit(event)}
+              handleSearchChange={event => handleSearchChange(event)}
+            />
+          </Paper>
+          <Paper className={classes.paper}>
+            <ReportTable />
+          </Paper>
+          {props.children}
+        </main>
+      </Context.Provider>
+    </SnackbarProvider>
   );
 };
 

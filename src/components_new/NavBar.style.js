@@ -26,5 +26,8 @@ export const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
+  },
+  menuIcon: {
+    fontSize: '8em'
   }
 }));

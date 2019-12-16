@@ -55,7 +55,7 @@ const NavBar = props => {
             aria-label="menu"
             onClick={props.handleDrawerOpen}
           >
-            <MenuIcon />
+            <MenuIcon className={classes.menuIcon}/>
           </IconButton>
           <Typography variant="subtitle1" className={classes.title}>
             Batch Scheduler
