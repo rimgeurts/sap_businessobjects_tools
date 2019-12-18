@@ -15,10 +15,16 @@ const Layout = props => {
     menu: {
       drawerMenuOpen: true
     },
-    reportId: undefined,
-    logonToken: null,
-    name: undefined,
-    password: undefined,
+    reportId: '',
+    reportName: '',
+    parentId: '',
+    folder: '',
+    updatedDate: '',
+    createdDate: '',
+    owner: '', 
+    logonToken: '',
+    name: '',
+    password: '',
     auth: "secEnterprise",
     server: "localhost:6405",
     error: ""
@@ -32,21 +38,11 @@ const Layout = props => {
     setState({ ...state, menu: { drawerMenuOpen: false } });
   };
 
-  const handleSearchSubmit = event => {
-    if (event.keyCode === 13 || event.keyCode === 9) {
-      login().then(response => {
-        setState({ ...state, logonToken: response.logonToken });
-      });
-    }
-  };
 
   React.useEffect(() => {
     console.log(state.logonToken);
   }, [state.logonToken]);
 
-  const handleSearchChange = event => {
-    setState({ ...state, reportId: event.target.value });
-  };
 
   const drawerWidth = 240;
   const open = state.menu.drawerMenuOpen;
@@ -86,10 +82,7 @@ const Layout = props => {
           })}
         >
           <Paper className={classes.paper}>
-            <SearchField
-              handleSearchSubmit={event => handleSearchSubmit(event)}
-              handleSearchChange={event => handleSearchChange(event)}
-            />
+            <SearchField/>
           </Paper>
           <Paper className={classes.paper}>
             <ReportTable />

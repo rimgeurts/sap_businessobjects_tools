@@ -5,13 +5,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { useStyles } from './ReportTable.style';
+import Context from '../util/Context';
 
 
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
-
+/*
 const rows = [
   createData(
     "CPO Report",
@@ -21,9 +22,21 @@ const rows = [
     "geurrem"
   )
 ];
-
-export default function DenseTable() {
+*/
+const DenseTable = () => {
   const classes = useStyles();
+  const { state, setState } = React.useContext(Context);
+  const {  reportName, parentId, folder, updatedDate, createdDate, owner } = state
+
+  const rows = [
+    createData(
+      reportName,
+      folder,
+      updatedDate,
+      createdDate,
+      owner
+    )
+  ];
 
   return (
     <div className={classes.root}>
@@ -70,3 +83,4 @@ export default function DenseTable() {
     </div>
   );
 }
+export default DenseTable
