@@ -20,10 +20,14 @@ const headCells = [
     id: "carbs",
     numeric: true,
     disablePadding: false,
-    label: "Refresh Time (s)"
+    label: "Duration"
   },
-  { id: "protein", numeric: true, disablePadding: false, label: "Recurring" }
+  { id: "owner", numeric: true, disablePadding: false, label: "Owner" },
+  { id: "starttime", numeric: true, disablePadding: false, label: "Start Time" },
+  { id: "endtime", numeric: true, disablePadding: false, label: "End Time" },
+  { id: "format", numeric: true, disablePadding: false, label: "Format" },
 ];
+
 
 function ScheduleTableHeader(props) {
   const classesTable = useStyles();

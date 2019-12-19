@@ -1,8 +1,10 @@
 let BASE_URL;
+let SERVER_URL;
 
 export const login = async (name, password, server, auth) => {
   let response;
-  BASE_URL = `http://${server}/biprws`;
+  SERVER_URL = server;
+  BASE_URL = `http://${SERVER_URL}/biprws`;
   try {
     response = await fetch(`${BASE_URL}/logon/long/`, {
       method: "POST",
@@ -32,6 +34,9 @@ export const getData = async (logonToken, url, overrideUrl = false) => {
   if (overrideUrl) {
     BASE_URL = "";
   }
+  if (!overrideUrl) {
+    BASE_URL = `http://${SERVER_URL}/biprws`;
+  }
   const response = await fetch(BASE_URL + url, {
     method: "GET",
     headers: {
@@ -43,24 +48,34 @@ export const getData = async (logonToken, url, overrideUrl = false) => {
   return response.json();
 };
 
-export const getParentFolders =  async (logonToken, url, parentFolderId, overrideUrl = false
+export const getParentFolders = async (
+  logonToken,
+  url,
+  parentFolderId,
+  overrideUrl = false,
+  folderPath = []
 ) => {
-  const response = await getData(logonToken, url, overrideUrl)
-  const folderPath = response.name;
-  console.log(folderPath);
-  
+  const response = await getData(logonToken, url, overrideUrl);
+  folderPath = [...folderPath, response.name];
+
   const parentURL = response.up.__deferred.uri;
-  
+
   if (!parentURL.includes("Root")) {
     const override = true;
-    return folderPath.concat(await getParentFolders(logonToken, parentURL, parentFolderId, override, folderPath));
+    return await getParentFolders(
+      logonToken,
+      parentURL,
+      parentFolderId,
+      override,
+      folderPath
+    );
   }
-  
+
   if (parentURL.includes("Root")) {
-    return folderPath;
-    console.log(folderPath);
+    const folderPathString = [...folderPath, "Public Folders"]
+      .reverse()
+      .join(" / ");
+
+    return folderPathString;
   }
 };
-
-
-

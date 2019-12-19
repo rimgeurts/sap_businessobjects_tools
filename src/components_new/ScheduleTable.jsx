@@ -5,19 +5,66 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import Context from "../util/Context";
 import { StyledTableRow, useStyles } from "./ScheduleTable.style";
 import ScheduleTableHeader from "./ScheduleTableHeader";
 import ScheduleTableToolBar from "./ScheduleTableToolBar";
+import { getData } from "../api/BusinessObjectsAPI";
+import Moment from "react-moment";
 
-function createData(name, status, fat, carbs, protein) {
-  return { name, status, fat, carbs, protein };
+function createData(rows) {
+  const {
+    owner,
+    schedulestatus,
+    opendoclink,
+    cuid,
+    uistatus,
+    created,
+    endtime,
+    starttime,
+    type,
+    duration,
+    path,
+    instancename,
+    expiry
+  } = rows;
+  return {
+    owner,
+    schedulestatus,
+    opendoclink,
+    cuid,
+    uistatus,
+    created,
+    endtime,
+    starttime,
+    type,
+    duration,
+    path,
+    instancename,
+    expiry
+  };
 }
 
 const rows = [
-  createData("Instance A", "Success", "08/12/2019", 67, "Yes"),
-  createData("Instance B", "Success", "07/12/2019", 51, "Yes"),
-  createData("Instance C", "Failure", "08/12/2019", 24, "No")
+  createData({
+    owner: "Administrator",
+    schedulestatus: "Success",
+    opendoclink:
+      "http://DESKTOP-62SI676:6400/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AWeR11wPrzZMr_ezoJVs4Vg",
+    cuid: "AWeR11wPrzZMr_ezoJVs4Vg",
+    uistatus: "Success",
+    created: "Dec 18, 2019 2:56 PM",
+    endtime: "Dec 18, 2019 2:57 PM",
+    starttime: "Dec 18, 2019 2:56 PM",
+    type: "Excel",
+    duration: "11 sec",
+    path: "CPO/Schedule/",
+    instancename: "CPO v1.1",
+    expiry: "Dec 18, 2019 2:57 PM"
+  })
+  // createData("Instance B", "Success", "07/12/2019", 51, "Yes"),
+  // createData("Instance C", "Failure", "08/12/2019", 24, "No")
 ];
 
 function desc(a, b, orderBy) {
@@ -54,6 +101,56 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { state, setState } = useContext(Context);
+
+  const { logonToken, reportId } = state;
+
+  const [instance, setInstance] = useState([
+    {
+      instancename: "",
+      schedulestatus: "",
+      created: "",
+      duration: "",
+      owner: "",
+      starttime: "",
+      endtime: "",
+      type: "",
+      path: "",
+      expiry: "",
+      opendoclink: "",
+      cuid: ""
+    }
+  ]);
+
+  useEffect(() => {
+    if (reportId) {
+      const response = getData(
+        logonToken,
+        `/v1/documents/${reportId}/instances`
+      ).then(response => {
+        let newArr = instance;
+        response.entries.forEach((element, i) => {
+          newArr[i] = {
+            owner: element.owner,
+            schedulestatus: element.schedulestatus,
+            opendoclink: element.opendoclink,
+            cuid: element.cuid,
+            uistatus: element.uistatus,
+            created: element.created,
+            endtime: element.endtime,
+            starttime: element.starttime,
+            type: element.type,
+            duration: element.duration,
+            path: element.path,
+            instancename: element.instancename,
+            expiry: element.expiry
+          };
+        });
+        setInstance([...instance, newArr]);
+        console.log(newArr);
+      });
+    }
+  }, [reportId]);
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -156,19 +253,40 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.instancename}
                       </TableCell>
                       <TableCell className={classes.row} align="right">
-                        {row.status}
+                        {row.schedulestatus}
                       </TableCell>
                       <TableCell className={classes.row} align="right">
-                        {row.fat}
+                        {row.created ? (
+                          <Moment format="DD/MM/YYYY">{row.created}</Moment>
+                        ) : (
+                          undefined
+                        )}
                       </TableCell>
                       <TableCell className={classes.row} align="right">
-                        {row.carbs}
+                        {row.duration}
                       </TableCell>
                       <TableCell className={classes.row} align="right">
-                        {row.protein}
+                        {row.owner}
+                      </TableCell>
+                      <TableCell className={classes.row} align="right">
+                        {row.starttime ? (
+                          <Moment format="HH:mm">{row.starttime}</Moment>
+                        ) : (
+                          undefined
+                        )}
+                      </TableCell>
+                      <TableCell className={classes.row} align="right">
+                        {row.endtime ? (
+                          <Moment format="HH:mm">{row.endtime}</Moment>
+                        ) : (
+                          undefined
+                        )}
+                      </TableCell>
+                      <TableCell className={classes.row} align="right">
+                        {row.type}
                       </TableCell>
                     </StyledTableRow>
                   );

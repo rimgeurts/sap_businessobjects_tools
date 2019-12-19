@@ -12,53 +12,17 @@ const SearchField = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleSearchSubmit = event => {
-    console.log("searching");
+   
     if (event.keyCode === 13 || event.keyCode === 9) {
-      
+
+      setState({ ...state, reportId: event.target.value });
       enqueueSnackbar("Searching for Report");
-      
-      let url = `/v1/documents/${state.reportId}`;
 
-      getData(state.logonToken, url).then(response => {
-        const { created, cuid, name, ownerid, parentid, updated } = response;
-
-        if (response.id) {
-          enqueueSnackbar("Report found", { variant: "info" });
-          
-          
-
-          (async () => {
-            url = `/infostore/${parentid}`
-            const folderPath = await getParentFolders(state.logonToken, url, parentid)
-
-            setState({
-              ...state,
-              reportName: name,
-              parentId: parentid,
-              folder: folderPath,
-              updatedDate: updated,
-              createdDate: created,
-              owner: ownerid
-            });
-          })();
-
-        } else {
-          enqueueSnackbar("Unable to find report", { variant: "warning" });
-          setState({
-            ...state,
-            reportName: "",
-            parentId: "",
-            updatedDate: "",
-            createdDate: "",
-            owner: ""
-          });
-        }
-      });
     }
   };
 
   const handleSearchChange = event => {
-    setState({ ...state, reportId: event.target.value });
+    
   };
 
   const classes = useStyles();

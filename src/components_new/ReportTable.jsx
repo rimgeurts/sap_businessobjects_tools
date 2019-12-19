@@ -3,40 +3,80 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import React from "react";
-import { useStyles } from './ReportTable.style';
-import Context from '../util/Context';
+import { useSnackbar } from "notistack";
+import React, { useEffect } from "react";
+import Moment from "react-moment";
+import { getData, getParentFolders } from "../api/BusinessObjectsAPI";
+import Context from "../util/Context";
+import { useStyles } from "./ReportTable.style";
 
-
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-/*
-const rows = [
-  createData(
-    "CPO Report",
-    "CRAFT \\ CPO",
-    "05/12/2019",
-    "05/07/2018",
-    "geurrem"
-  )
-];
-*/
 const DenseTable = () => {
   const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, setState } = React.useContext(Context);
-  const {  reportName, parentId, folder, updatedDate, createdDate, owner } = state
+  const [report, setReport] = React.useState({
+    reportName: "",
+    parentId: "",
+    folder: "",
+    updatedDate: "",
+    createdDate: "",
+    owner: ""
+  });
+  const {
+    reportName,
+    parentId,
+    folder,
+    updatedDate,
+    createdDate,
+    owner
+  } = report;
 
-  const rows = [
-    createData(
-      reportName,
-      folder,
-      updatedDate,
-      createdDate,
-      owner
-    )
-  ];
+  useEffect(() => {
+    if (state.reportId) {
+      let url = `/v1/documents/${state.reportId}`;
+
+      getData(state.logonToken, url).then(response => {
+        const { created, cuid, name, ownerid, parentid, updated } = response;
+
+        if (response.id) {
+          enqueueSnackbar("Report found", { variant: "info" });
+
+          (async () => {
+            url = `/infostore/${parentid}`;
+            const folderPath = await getParentFolders(
+              state.logonToken,
+              url,
+              parentid
+            );
+            const owner = await getData(state.logonToken, "/users/12");
+            console.log("owner ");
+            setReport({
+              ...state,
+              reportName: name,
+              parentId: parentid,
+              folder: folderPath,
+              updatedDate: updated,
+              createdDate: created,
+              owner: owner.entries[0].title
+            });
+          })();
+        } else {
+          enqueueSnackbar("Unable to find report", { variant: "warning" });
+          setReport({
+            ...state,
+            report: {
+              reportName: "",
+              parentId: "",
+              folder: "",
+              updatedDate: "",
+              createdDate: "",
+              owner: ""
+            }
+          });
+        }
+      });
+    }
+  }, [state.reportId]);
 
   return (
     <div className={classes.root}>
@@ -59,28 +99,34 @@ const DenseTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.name}>
-              <TableCell className={classes.cell} component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell className={classes.cell} align="center">
-                {row.calories}
-              </TableCell>
-              <TableCell className={classes.cell} align="center">
-                {row.fat}
-              </TableCell>
-              <TableCell className={classes.cell} align="center">
-                {row.carbs}
-              </TableCell>
-              <TableCell className={classes.cell} align="center">
-                {row.protein}
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell className={classes.cell} component="th" scope="row">
+              {reportName}
+            </TableCell>
+            <TableCell className={classes.cell} align="center">
+              {folder}
+            </TableCell>
+            <TableCell className={classes.cell} align="center">
+              {updatedDate ? (
+                <Moment format="DD/MM/YYYY">{updatedDate}</Moment>
+              ) : (
+                undefined
+              )}
+            </TableCell>
+            <TableCell className={classes.cell} align="center">
+              {createdDate ? (
+                <Moment format="DD/MM/YYYY">{createdDate}</Moment>
+              ) : (
+                undefined
+              )}
+            </TableCell>
+            <TableCell className={classes.cell} align="center">
+              {owner}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>
   );
-}
-export default DenseTable
+};
+export default DenseTable;

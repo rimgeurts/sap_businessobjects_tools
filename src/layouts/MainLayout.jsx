@@ -15,19 +15,13 @@ const Layout = props => {
     menu: {
       drawerMenuOpen: true
     },
-    reportId: '',
-    reportName: '',
-    parentId: '',
-    folder: '',
-    updatedDate: '',
-    createdDate: '',
-    owner: '', 
-    logonToken: '',
-    name: '',
-    password: '',
+    reportId: "",
+    logonToken: "",
+    name: "",
+    password: "",
     auth: "secEnterprise",
     server: "localhost:6405",
-    error: ""
+    error: "",
   });
 
   const handleDrawerOpen = () => {
@@ -38,11 +32,8 @@ const Layout = props => {
     setState({ ...state, menu: { drawerMenuOpen: false } });
   };
 
-
   React.useEffect(() => {
-    console.log(state.logonToken);
   }, [state.logonToken]);
-
 
   const drawerWidth = 240;
   const open = state.menu.drawerMenuOpen;
@@ -82,7 +73,7 @@ const Layout = props => {
           })}
         >
           <Paper className={classes.paper}>
-            <SearchField/>
+            <SearchField />
           </Paper>
           <Paper className={classes.paper}>
             <ReportTable />

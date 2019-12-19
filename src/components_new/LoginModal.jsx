@@ -37,7 +37,6 @@ export default function LoginModal() {
     enqueueSnackbar("Atempting to authenticate...");
     login(state.name, state.password, state.server, state.auth)
       .then(response => {
-        console.log("Customer error message", response);
         if (response.error_code == "SERVER_ERROR") {
           setState({
             ...state,
@@ -77,7 +76,6 @@ export default function LoginModal() {
   };
 
   const handleChange = event => {
-    console.log([event.target.id]);
     setState({
       ...state,
       [event.target.id]: event.target.value
