@@ -10,6 +10,7 @@ import { getData, getParentFolders } from "../api/BusinessObjectsAPI";
 import Context from "../util/Context";
 import { useStyles } from "./ReportTable.style";
 
+
 const DenseTable = () => {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -48,7 +49,7 @@ const DenseTable = () => {
               url,
               parentid
             );
-            const owner = await getData(state.logonToken, "/users/12");
+            const owner = await getData(state.logonToken, `/users/${ownerid}`);
             console.log("owner ");
             setReport({
               ...state,
@@ -76,7 +77,7 @@ const DenseTable = () => {
         }
       });
     }
-  }, [state.reportId]);
+  }, [state.reportIdChanged]);
 
   return (
     <div className={classes.root}>

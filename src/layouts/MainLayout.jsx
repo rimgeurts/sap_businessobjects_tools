@@ -16,12 +16,14 @@ const Layout = props => {
       drawerMenuOpen: true
     },
     reportId: "",
+    isReportIdValid: false,
     logonToken: "",
     name: "",
     password: "",
     auth: "secEnterprise",
     server: "localhost:6405",
     error: "",
+    reportIdChanged: false
   });
 
   const handleDrawerOpen = () => {

@@ -30,7 +30,7 @@ export const login = async (name, password, server, auth) => {
   return response.json();
 };
 
-export const getData = async (logonToken, url, overrideUrl = false) => {
+export const getData = async (logonToken, url, overrideUrl = false, method="GET") => {
   if (overrideUrl) {
     BASE_URL = "";
   }
@@ -38,7 +38,7 @@ export const getData = async (logonToken, url, overrideUrl = false) => {
     BASE_URL = `http://${SERVER_URL}/biprws`;
   }
   const response = await fetch(BASE_URL + url, {
-    method: "GET",
+    method: method,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

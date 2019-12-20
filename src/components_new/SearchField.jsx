@@ -12,18 +12,20 @@ const SearchField = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleSearchSubmit = event => {
-   
     if (event.keyCode === 13 || event.keyCode === 9) {
-
-      setState({ ...state, reportId: event.target.value });
+      setState(prevState => {
+        console.log("changing state");
+        return {
+          ...prevState,
+          reportId: event.target.value,
+          reportIdChanged: !prevState.reportIdChanged
+        };
+      });
       enqueueSnackbar("Searching for Report");
-
     }
   };
 
-  const handleSearchChange = event => {
-    
-  };
+  const handleSearchChange = event => {};
 
   const classes = useStyles();
 

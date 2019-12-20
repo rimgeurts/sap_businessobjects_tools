@@ -7,27 +7,64 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useStyles } from "./ScheduleTableHeader.style";
 
-const headCells = [
+export const headCells = [
   {
-    id: "name",
+    id: "instancename",
     numeric: false,
+    align: "left",
     disablePadding: true,
     label: "Instance Name"
   },
-  { id: "status", numeric: true, disablePadding: false, label: "Status" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Created Date" },
   {
-    id: "carbs",
+    id: "schedulestatus",
     numeric: true,
+    align: "left",
+    disablePadding: false,
+    label: "Status"
+  },
+  {
+    id: "created",
+    numeric: true,
+    align: "left",
+    disablePadding: false,
+    label: "Date"
+  },
+  {
+    id: "duration",
+    numeric: true,
+    align: "left",
     disablePadding: false,
     label: "Duration"
   },
-  { id: "owner", numeric: true, disablePadding: false, label: "Owner" },
-  { id: "starttime", numeric: true, disablePadding: false, label: "Start Time" },
-  { id: "endtime", numeric: true, disablePadding: false, label: "End Time" },
-  { id: "format", numeric: true, disablePadding: false, label: "Format" },
+  {
+    id: "owner",
+    numeric: true,
+    align: "left",
+    disablePadding: false,
+    label: "Owner"
+  },
+  {
+    id: "starttime",
+    numeric: true,
+    align: "center",
+    disablePadding: false,
+    label: "Start"
+  },
+  {
+    id: "endtime",
+    numeric: true,
+    align: "center",
+    disablePadding: false,
+    label: "End-Time"
+  },
+  {
+    id: "type",
+    numeric: true,
+    align: "center",
+    disablePadding: false,
+    label: "Format"
+  }
 ];
-
 
 function ScheduleTableHeader(props) {
   const classesTable = useStyles();
@@ -53,7 +90,7 @@ function ScheduleTableHeader(props) {
           <Checkbox
             className={classesTable.colorScheme}
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected === rowCount}
+            checked={numSelected === rowCount && rowCount > 0}
             onChange={onSelectAllClick}
             inputProps={{ "aria-label": "select all desserts" }}
           />
@@ -62,7 +99,7 @@ function ScheduleTableHeader(props) {
           <TableCell
             className={classesTable.row}
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.align}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >

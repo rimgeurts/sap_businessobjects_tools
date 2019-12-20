@@ -7,12 +7,30 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import React from "react";
-import { useStyles } from './ScheduleTableToolBar.style';
-
+import { getData } from "../api/BusinessObjectsAPI";
+import Context from "../util/Context";
+import { useStyles } from "./ScheduleTableToolBar.style";
 
 const ScheduleTableToolBar = props => {
   const classes = useStyles();
-  const { numSelected } = props;
+  const { state, setState } = React.useContext(Context);
+  const { logonToken, reportId } = state;
+  const { numSelected, selected, setSelected, reload } = props;
+
+  const handleDeleteInstance = () => {
+    selected.map(instance => {
+      getData(
+        logonToken,
+        `/v1/documents/${reportId}/instances/${instance}`,
+        false,
+        "DELETE"
+      ).then(response => {
+        console.log("DELETED: ", response);
+        setSelected([]);
+        reload();
+      });
+    });
+  };
 
   return (
     <Toolbar
@@ -36,7 +54,7 @@ const ScheduleTableToolBar = props => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" onClick={handleDeleteInstance}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

@@ -20,7 +20,7 @@ export const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2)
   },
   table: {
-    minWidth: 750
+    //minWidth: 550
   },
   tableWrapper: {
     overflowX: "auto"
@@ -41,6 +41,15 @@ export const useStyles = makeStyles(theme => ({
     "&:hover": {
       //backgroundColor: 'grey'
     }
+  },
+
+  rowButton: {
+    padding: 0,
+    height: '15px',
+    width: '50px',
+    fontSize: '8px',
+    marginRight: '15px',
+    //backgroundColor: 'green'
   },
   paginitation: {
     fontsize: "0.1em"
