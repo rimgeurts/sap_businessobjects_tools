@@ -14,7 +14,6 @@ const SearchField = () => {
   const handleSearchSubmit = event => {
     if (event.keyCode === 13 || event.keyCode === 9) {
       setState(prevState => {
-        console.log("changing state");
         return {
           ...prevState,
           reportId: event.target.value,

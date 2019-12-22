@@ -30,7 +30,7 @@ export const login = async (name, password, server, auth) => {
   return response.json();
 };
 
-export const getData = async (logonToken, url, overrideUrl = false, method="GET") => {
+export const getData = async (logonToken, url, overrideUrl = false, method = "GET", payload = null) => {
   if (overrideUrl) {
     BASE_URL = "";
   }
@@ -43,7 +43,8 @@ export const getData = async (logonToken, url, overrideUrl = false, method="GET"
       Accept: "application/json",
       "Content-Type": "application/json",
       "X-SAP-LogonToken": logonToken
-    }
+    },
+    body: payload
   });
   return response.json();
 };

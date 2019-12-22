@@ -7,6 +7,7 @@ import NavBar from "../components_new/NavBar";
 import ReportTable from "../components_new/ReportTable";
 import SearchField from "../components_new/SearchField";
 import { login, getData } from "../api/BusinessObjectsAPI";
+import ReportSearch from "../components_new/ReportSearch";
 import Context from "../util/Context";
 import { SnackbarProvider } from "notistack";
 
@@ -34,8 +35,7 @@ const Layout = props => {
     setState({ ...state, menu: { drawerMenuOpen: false } });
   };
 
-  React.useEffect(() => {
-  }, [state.logonToken]);
+  React.useEffect(() => {}, [state.logonToken]);
 
   const drawerWidth = 240;
   const open = state.menu.drawerMenuOpen;
@@ -59,6 +59,10 @@ const Layout = props => {
     },
     paper: {
       marginBottom: 5
+    },
+    papersearch: {
+      marginBottom: 20,
+      width: 500,
     }
   }));
 
@@ -74,8 +78,8 @@ const Layout = props => {
             [classes.contentShift]: open
           })}
         >
-          <Paper className={classes.paper}>
-            <SearchField />
+          <Paper className={classes.papersearch}>
+            <ReportSearch />
           </Paper>
           <Paper className={classes.paper}>
             <ReportTable />
