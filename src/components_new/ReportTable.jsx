@@ -40,8 +40,6 @@ const DenseTable = () => {
         const { created, cuid, name, ownerid, parentid, updated } = response;
 
         if (response.id) {
-          enqueueSnackbar("Report found", { variant: "info" });
-
           (async () => {
             url = `/infostore/${parentid}`;
             const folderPath = await getParentFolders(
