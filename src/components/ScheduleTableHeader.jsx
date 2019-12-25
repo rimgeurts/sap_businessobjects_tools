@@ -55,7 +55,7 @@ export const headCells = [
     numeric: true,
     align: "center",
     disablePadding: false,
-    label: "End-Time"
+    label: "End"
   },
   {
     id: "type",

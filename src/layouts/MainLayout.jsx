@@ -2,12 +2,12 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import React from "react";
-import DrawerMenu from "../components_new/DrawerMenu";
-import NavBar from "../components_new/NavBar";
-import ReportTable from "../components_new/ReportTable";
-import SearchField from "../components_new/SearchField";
+import DrawerMenu from "../components/DrawerMenu";
+import NavBar from "../components/NavBar";
+import ReportTable from "../components/ReportTable";
+import SearchField from "../components/SearchField";
 import { login, getData } from "../api/BusinessObjectsAPI";
-import ReportSearch from "../components_new/ReportSearch";
+import ReportSearch from "../components/ReportSearch";
 import Context from "../util/Context";
 import { SnackbarProvider } from "notistack";
 

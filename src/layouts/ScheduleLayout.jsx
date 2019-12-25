@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "./MainLayout";
-import ScheduleTable from "../components_new/ScheduleTable";
+import ScheduleTable from "../components/ScheduleTable";
 import { green, orange } from "@material-ui/core/colors";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 

@@ -56,7 +56,7 @@ export default function DrawerMenu(props) {
               <ListItemIcon>
                 <ScheduleIcon />
               </ListItemIcon>
-              <ListItemText primary={"Status"} />
+              <ListItemText primary={"Instances"} />
             </ListItem>
           </List>
           <Divider />
