@@ -1,31 +1,16 @@
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import React from "react";
+import { SnackbarProvider } from "notistack";
+import React, {useContext} from "react";
+import Context from '../util/Context'
 import DrawerMenu from "../components/DrawerMenu";
 import NavBar from "../components/NavBar";
-import ReportTable from "../components/ReportTable";
-import SearchField from "../components/SearchField";
-import { login, getData } from "../api/BusinessObjectsAPI";
 import ReportSearch from "../components/ReportSearch";
-import Context from "../util/Context";
-import { SnackbarProvider } from "notistack";
+import ReportTable from "../components/ReportTable";
 
-const Layout = props => {
-  const [state, setState] = React.useState({
-    menu: {
-      drawerMenuOpen: true
-    },
-    reportId: "",
-    isReportIdValid: false,
-    logonToken: "",
-    name: "",
-    password: "",
-    auth: "secEnterprise",
-    server: "localhost:6405",
-    error: "",
-    reportIdChanged: false
-  });
+const MainLayout = props => {
+  const { state, setState } = useContext(Context);
 
   const handleDrawerOpen = () => {
     setState({ ...state, menu: { drawerMenuOpen: true } });
@@ -35,7 +20,11 @@ const Layout = props => {
     setState({ ...state, menu: { drawerMenuOpen: false } });
   };
 
-  React.useEffect(() => {}, [state.logonToken]);
+  React.useEffect(() => {
+    if (state.logonToken) {
+      setState({...state, isAuthenticated: true });
+    }
+  }, [state.logonToken]);
 
   const drawerWidth = 240;
   const open = state.menu.drawerMenuOpen;
@@ -62,7 +51,7 @@ const Layout = props => {
     },
     papersearch: {
       marginBottom: 20,
-      width: 500,
+      width: 500
     }
   }));
 
@@ -70,7 +59,6 @@ const Layout = props => {
 
   return (
     <SnackbarProvider>
-      <Context.Provider value={{ state, setState }}>
         <DrawerMenu handleDrawerClose={handleDrawerClose} state={state} />
         <NavBar handleDrawerOpen={handleDrawerOpen} state={state}></NavBar>
         <main
@@ -86,9 +74,8 @@ const Layout = props => {
           </Paper>
           {props.children}
         </main>
-      </Context.Provider>
     </SnackbarProvider>
   );
 };
 
-export default Layout;
+export default MainLayout;

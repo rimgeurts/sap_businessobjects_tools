@@ -57,7 +57,6 @@ export default function ReportSearch() {
   const [options, setOptions] = useState([]);
 
   const handleOnChange = (event, value) => {
-    console.log(event.target.value.length);
     let newreportBaseOptions = [];
     let payload = "";
     event.target.value.length > 0
@@ -96,10 +95,8 @@ export default function ReportSearch() {
             return folderArr;
           })().then(() => {
             setReportBaseOptions(folderArr);
-            console.log(folderArr);
           });
         });
-        console.log("newArr: ", folderArr);
       });
     setReportSearch(event.target.value);
   };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -52,72 +53,80 @@ export default function EnhancedTable() {
   const { state, setState } = useContext(Context);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { logonToken, reportId, reportIdChanged, serve, refresh } = state;
+  const [isInstanceDataLoadComplete, setIsInstanceDataLoadComplete] = useState(
+    false
+  );
 
-  const [instance, setInstance] = useState([
-    {
-      instanceid: "",
-      instancename: "",
-      schedulestatus: "",
-      created: "",
-      duration: "",
-      owner: "",
-      starttime: "",
-      endtime: "",
-      type: "",
-      path: "",
-      expiry: "",
-      opendoclink: "",
-      cuid: ""
-    }
-  ]);
+  const [instance, setInstance] = useState([]);
 
-  const getInstanceData = () => {
-    setInstance([])
+  const getInstanceData = types => {
+    let url;
+    setInstance([]);
     if (reportId) {
-      const response = getData(
-        logonToken,
-        `/v1/documents/${reportId}/instances`
-      )
-        .then(response => {
-          let newArr = [];
-          if (response.entries.length > 0) {
-            console.log("response", response.entries);
-            response.entries.forEach((element, i) => {
-              newArr[i] = {
-                owner: element.owner,
-                schedulestatus: element.schedulestatus,
-                opendoclink: element.opendoclink.replace('6400', '6405'),
-                cuid: element.cuid,
-                uistatus: element.uistatus,
-                created: element.created,
-                endtime: element.endtime,
-                starttime: element.starttime,
-                type: element.type,
-                duration: element.duration,
-                path: element.path,
-                instancename: element.instancename,
-                instanceid: element.id,
-                expiry: element.expiry
-              };
-            });
-            setInstance(newArr);
-          } else {
-            enqueueSnackbar("No instances data for selected report", {
-              variant: "warning"
-            });
+      types.forEach(type => {
+        let newArr = [];
+        console.log(type);
+        type === "instances"
+          ? (url = `/v1/documents/${reportId}/instances`)
+          : (url = `/v1/documents/${reportId}/schedules`);
+
+        getData(logonToken, url)
+          .then(response => {
+            if (response.entries.length > 0) {
+              response.entries.forEach((element, i) => {
+                newArr = [
+                  ...newArr,
+                  {
+                    owner: element.owner,
+                    schedulestatus: element.schedulestatus,
+                    opendoclink:
+                      type === "schedules"
+                        ? undefined
+                        : element.opendoclink.replace("6400", "6405"),
+                    cuid: element.cuid,
+                    uistatus: element.uistatus,
+                    created: element.created,
+                    endtime: type === "schedules" ? undefined : element.endtime,
+                    starttime:
+                      type === "schedules"
+                        ? element.nextruntime
+                        : element.starttime,
+                    type: element.type,
+                    duration: element.duration,
+                    path: element.path,
+                    instancename:
+                      type === "schedules"
+                        ? element.schedulename
+                        : element.instancename,
+                    instanceid: element.id,
+                    expiry: element.expiry
+                  }
+                ];
+              });
+
+              console.log(type, instance);
+              //setInstance(newArr);
+              setInstance(prevState => {
+                return [...prevState, ...newArr];
+              });
+            }
+          })
+          .catch(() => {
             setInstance([]);
-          }
-        })
-        .catch(() => {
-          setInstance([]);
-        });
+          });
+      });
     } else {
       setInstance([]);
     }
-  }
+    if (instance.length === 0) {
+      enqueueSnackbar("No Instances Found");
+    }
+  };
 
   useEffect(() => {
-    getInstanceData()
+    if (reportId) {
+      getInstanceData(["instances", "schedules"]);
+    }
   }, [reportIdChanged]);
 
   const handleRequestSort = (event, property) => {
@@ -173,7 +182,12 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <ScheduleTableToolBar reload={getInstanceData} selected={selected} setSelected={setSelected} numSelected={selected.length} />
+        <ScheduleTableToolBar
+          reload={getInstanceData}
+          selected={selected}
+          setSelected={setSelected}
+          numSelected={selected.length}
+        />
         <div className={classes.tableWrapper}>
           <Table
             className={classes.table}
@@ -229,7 +243,7 @@ export default function EnhancedTable() {
                         {row.instancename}
                       </TableCell>
                       <TableCell className={classes.row} align="left">
-                        {row.schedulestatus}
+                        {row.uistatus}
                       </TableCell>
                       <TableCell className={classes.row} align="left">
                         {row.created ? (
@@ -264,7 +278,8 @@ export default function EnhancedTable() {
                           variant="outlined"
                           color="primary"
                           size="small"
-                          target="_blank" href={row.opendoclink}
+                          target="_blank"
+                          href={row.opendoclink}
                         >
                           {row.type}
                         </Button>

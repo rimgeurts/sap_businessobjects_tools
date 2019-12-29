@@ -15,14 +15,16 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import CreateIcon from "@material-ui/icons/Create";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import React from "react";
-import { useStyles } from './DrawerMenu.styles';
-
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { useStyles } from "./DrawerMenu.styles";
+import MainLayout from "../layouts/MainLayout";
+import InstanceLayout from "../layouts/InstanceLayout";
+import ManageLayout from "../layouts/InstanceLayout";
 
 export default function DrawerMenu(props) {
-  
   const theme = useTheme();
   const classes = useStyles();
- 
+
   const open = props.state.menu.drawerMenuOpen;
 
   return (
@@ -52,38 +54,70 @@ export default function DrawerMenu(props) {
             subheader={<ListSubheader>Scheduling</ListSubheader>}
             className={classes.root}
           >
-            <ListItem button>
-              <ListItemIcon>
-                <ScheduleIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Instances"} />
-            </ListItem>
+            <Link
+              to="/instances"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <ScheduleIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Instances"} />
+              </ListItem>
+            </Link>
+            <Link
+              to="/instances/new"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <ScheduleIcon />
+                </ListItemIcon>
+                <ListItemText primary={"New"} />
+              </ListItem>
+            </Link>
           </List>
           <Divider />
           <List
             subheader={<ListSubheader>Groups</ListSubheader>}
             className={classes.root}
           >
-            <ListItem button>
-              <ListItemIcon>
-                <CreateIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Manage"} />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <BackupIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Import"} />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <AddBoxIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Create"} />
-            </ListItem>
+            <Link
+              to="/manage"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <CreateIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Manage"} />
+              </ListItem>
+            </Link>
+            <Link
+              to="/import"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Import"} />
+              </ListItem>
+            </Link>
+            <Link
+              to="/create"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <AddBoxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Create"} />
+              </ListItem>
+            </Link>
           </List>
         </List>
+
         <Divider />
       </Drawer>
     </div>

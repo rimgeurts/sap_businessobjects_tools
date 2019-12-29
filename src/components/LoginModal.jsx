@@ -18,9 +18,9 @@ import LoginModalDropdown from "./loginModalDropdown";
 import { useSnackbar } from "notistack";
 
 export default function LoginModal() {
-  const [open, setOpen] = React.useState(true);
   const [message, setMessage] = React.useState("login");
   const { state, setState } = React.useContext(Context);
+  const [open, setOpen] = React.useState(!state.isAuthenticated);
   const [userError, setUserError] = React.useState(false);
   const [serverError, setServerError] = React.useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -37,11 +37,10 @@ export default function LoginModal() {
     enqueueSnackbar("Atempting to authenticate...");
     login(state.name, state.password, state.server, state.auth)
       .then(response => {
-        if (response.error_code == "SERVER_ERROR") {
+        if (response.error_code === "SERVER_ERROR") {
           setState({
             ...state,
             error: "Cannot connect to the server.",
-            error: response.message
           });
           setServerError(true);
           enqueueSnackbar("Unable to connect to server", { variant: "error" });
@@ -80,7 +79,7 @@ export default function LoginModal() {
       ...state,
       [event.target.id]: event.target.value
     });
-    if (event.target.id == "server") {
+    if (event.target.id === "server") {
       setServerError(false);
     } else {
       setUserError(false);
@@ -97,7 +96,7 @@ export default function LoginModal() {
         </div>
         <UserIcon />
       </Button>
-      <Dialog maxWidth="xs" open={open} aria-labelledby="form-dialog-title">
+      <Dialog maxWidth="xs" open={state.logonToken ? false : true} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">
           <Lock className={classes.lockButton} />
           <div className={classes.title} >Login</div>

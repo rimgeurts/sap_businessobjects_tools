@@ -81,7 +81,7 @@ const InstanceLayout = props => {
   return (
     <ThemeProvider theme={theme}>
       <MainLayout>
-        NEW SCHEDULE
+        <ScheduleTable />
       </MainLayout>
     </ThemeProvider>
   );

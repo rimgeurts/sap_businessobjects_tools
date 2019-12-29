@@ -15,19 +15,19 @@ const theme = createMuiTheme({
       root: {
         backgroundColor: "#3f51b5",
         "& h6": {
-          fontSize: "0.75em",
+          fontSize:'0.75em',
           color: "white"
         }
       }
     },
     MuiSvgIcon: {
       root: {
-        fontSize: "1.5em"
+        fontSize: '1.5em'
       }
     },
     MuiTablePagination: {
       root: {
-        fontSize: "0.7em"
+        fontSize: '0.7em'
       }
     }
   },
@@ -72,19 +72,19 @@ const theme = createMuiTheme({
       fontSize: "1em"
     },
     button: {
-      fontSize: ".9em"
+      fontSize: '.9em'
     }
-  }
+  },
 });
 
-const InstanceLayout = props => {
+const ManageLayout = props => {
   return (
     <ThemeProvider theme={theme}>
       <MainLayout>
-        NEW SCHEDULE
+        Manage
       </MainLayout>
     </ThemeProvider>
   );
 };
 
-export default InstanceLayout;
+export default ManageLayout;
