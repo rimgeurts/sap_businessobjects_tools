@@ -8,7 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.36",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "notistack": "^0.9.7",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
